@@ -1,34 +1,42 @@
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        
-        int n = s.length();
-        int result = 0;
-        
-        for(int i = 0; i < n; i++) {
-            for(int j = i; j < n; j++) {
-                if(checkRepetition(s, i, j)) {
-                    result = Math.max(result, j-i+1);
+
+        int length = s.length();
+
+        if (length == 0) return 0;
+
+        if (length == 1) return 1;
+
+        int max = -1;
+
+        for(int i = 0; i < length; i++) {
+
+            boolean flag = true;
+
+            if (max >= length - i)
+                return max;
+
+            for(int j = i+1; j < length; j++) {
+
+                String str = s.substring(i, j);
+
+                if (str.indexOf(s.charAt(j)) != -1) {
+
+                    if(str.length() > max) {
+                        max = str.length();
+                    }
+
+                    flag = false;
+
+                    break;
                 }
-                
-                else break;
             }
-        }
-        
-        return result;
-        
-    }
-    
-    private boolean checkRepetition(String s, int start, int end) {
-        int[] chars = new int[128];
 
-        for (int i = start; i <= end; i++) {
-            char c = s.charAt(i);
-            chars[c]++;
-            if (chars[c] > 1) {
-                return false;
+            if (flag && length - i > max) {
+                max = length - i;
             }
         }
 
-        return true;
+        return max;
     }
 }
