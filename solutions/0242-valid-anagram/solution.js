@@ -3,24 +3,26 @@
  * @param {string} t
  * @return {boolean}
  */
-var isAnagram = function(s, t) {
-    if (s.length != t.length) {
+var isAnagram = function (s, t) {
+    if (s.length !== t.length) {
         return false
     }
-    
+
     let sMap = {}
     let tMap = {}
 
-    for (let i = 0; i < s.length; i++) {
-        sMap[s[i]] = (sMap[s[i]] || 0) + 1 
+    for (c of s) {
+        if (sMap[c]) sMap[c]++
+        else sMap[c] = 1
     }
 
-    for (let i = 0; i < t.length; i++) {
-        tMap[t[i]] = (tMap[t[i]] || 0) + 1 
+    for (c of t) {
+        if (tMap[c]) tMap[c]++
+        else tMap[c] = 1
     }
 
-    for (const letter in sMap) {
-        if (sMap[letter] !== tMap[letter]) {
+    for (const [key, value] of Object.entries(sMap)) {
+        if (tMap[key] !== sMap[key]) {
             return false
         }
     }
