@@ -2,29 +2,24 @@
  * @param {number[]} nums
  * @return {number[]}
  */
-var productExceptSelf = function(nums) {
-    let totalProduct = 1
-    let zeroIndex = []
-    let result = []
+var productExceptSelf = function (nums) {
+    const size = nums.length
+    let left = Array(size).fill(1)
+    let right = Array(size).fill(1)
+    let result = Array(size).fill(1)
 
-    for (let i = 0; i < nums.length; i++) {
-        nums[i] !== 0 
-            ? totalProduct *= nums[i]
-            : zeroIndex.push(i)
+    const help = (arr, index) => {
+        if (arr[index] === undefined) return 1
+        return arr[index]
     }
 
-    if (zeroIndex.length > 0) {
-        let arr = new Array(nums.length).fill(0)
-
-        if (zeroIndex.length === 1) {
-            arr[zeroIndex[0]] = totalProduct
-        }
-
-        return arr
+    for (let i = 0; i < size; i++) {
+        left[i] = help(left, i - 1) * help(nums, i - 1)
+        right[size - 1 - i] = help(right, size - i) * help(nums, size - i)
     }
 
-    for (let i = 0; i < nums.length; i++) {
-        result.push(totalProduct/nums[i])
+    for (let i = 0; i < size; i++) {
+        result[i] = left[i] * right[i]
     }
 
     return result
