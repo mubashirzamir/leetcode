@@ -22,13 +22,8 @@ var levelOrder = function (root) {
         if (result[level] === undefined) result[level] = []
         result[level].push(node.val)
 
-        if (node.left) {
-            queue.push([node.left, level + 1])
-        }
-
-        if (node.right) {
-            queue.push([node.right, level + 1])
-        }
+        if (node.left) queue.push([node.left, level + 1])
+        if (node.right) queue.push([node.right, level + 1])
     }
 
     return result
