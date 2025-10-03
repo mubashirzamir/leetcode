@@ -3,21 +3,27 @@
  * @return {number[]}
  */
 var productExceptSelf = function (nums) {
-    let start1 = 1
-    let res = []
+    let fArr = []
+    let start = 1
 
-    for (let i = 0; i < nums.length; i++) {
-        res.push(start1)
-        start1 = start1 * nums[i]
+    for (n of nums) {
+        fArr.push(start)
+        start = start * n
     }
 
-
-    let start2 = 1
+    let bArr = []
+    start = 1
 
     for (let i = nums.length - 1; i >= 0; i--) {
-        res[i] = start2 * res[i]
-        start2 = start2 * nums[i]
+        bArr[i] = start
+        start = start * nums[i]
     }
 
-    return res
+    let result = []
+
+    for (let i = 0; i < nums.length; i++) {
+        result[i] = fArr[i] * bArr[i]
+    }
+
+    return result
 };
