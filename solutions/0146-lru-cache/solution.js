@@ -1,26 +1,62 @@
+// Linked Hashmap
 class LRUCache {
     constructor(capacity) {
-        this.map = new Map()
         this.capacity = capacity
+        this.map = new Map()
+
+        this.head = new Node(null, null) // dummy head
+        this.tail = new Node(null, null) // dummy tail
+
+        this.head.next = this.tail
+        this.tail.prev = this.head
     }
 
-    get = (key) => {
+    get(key) {
         if (!this.map.has(key)) return -1
 
-        const temp = this.map.get(key)
-        this.map.delete(key)
-        this.map.set(key, temp)
+        const node = this.map.get(key)
 
-        return temp
+        this._remove(node)
+        this._append(node)
+
+        return node.value
     }
 
-    put = (key, value) => {
+    put(key, value) {
         if (this.map.has(key)) {
-            this.map.delete(key)
+            const node = this.map.get(key)
+            this._remove(node)
         } else if (this.map.size >= this.capacity) {
-            this.map.delete(this.map.keys().next().value)
+            const node = this.head.next
+            this._remove(node)
+            this.map.delete(node.key)
         }
 
-        this.map.set(key, value)
+        const node = new Node(key, value)
+        this._append(node)
+        this.map.set(key, node)
+    }
+
+    _remove(node) {
+        node.next.prev = node.prev
+        node.prev.next = node.next
+    }
+
+    _append(node) {
+        node.next = this.tail
+        node.prev = this.tail.prev
+        node.prev.next = node
+        this.tail.prev = node
+    }
+
+}
+
+class Node {
+    constructor(key, value) {
+        this.key = key
+        this.value = value
+        this.next = null
+        this.prev = null
     }
 }
+
