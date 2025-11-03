@@ -1,57 +1,42 @@
 class MyQueue {
-    firstStack: Array<number>
-    secondStack: Array<number>
+    forwardStack = []
+    backwardStack = []
+
+    inverted = false
 
     constructor() {
-        this.firstStack = []
-        this.secondStack = []
     }
 
     push(x: number): void {
-        this.firstStack.unshift(x)
+        if (this.inverted) this._invert()
+        this.forwardStack.push(x)
     }
 
     pop(): number {
-        if (this.firstStack.length === 0) {
-            return undefined
-        }
-
-        while (this.firstStack.length > 1) {
-            this.secondStack.unshift(this.firstStack.shift())
-        }
-
-        const result = this.firstStack.shift()
-
-        while (this.secondStack.length !== 0) {
-            this.firstStack.unshift(this.secondStack.shift())
-        }
-
-        return result
+        if (!this.inverted) this._invert()
+        return this.backwardStack.pop()
     }
 
     peek(): number {
-        if (this.firstStack.length === 0) {
-            return undefined
-        }
-
-        let result = 0
-        while (this.firstStack.length !== 0) {
-            if (this.firstStack.length === 1) {
-                result = this.firstStack[0]
-            }
-
-            this.secondStack.unshift(this.firstStack.shift())
-        }
-
-        while (this.secondStack.length !== 0) {
-            this.firstStack.unshift(this.secondStack.shift())
-        }
-
-        return result
+        if (!this.inverted) this._invert()
+        return this.backwardStack[this.backwardStack.length - 1]
     }
 
     empty(): boolean {
-        return this.firstStack.length === 0
+        return this.forwardStack.length === 0 && this.backwardStack.length === 0
+    }
+
+    _invert() {
+        if (!this.inverted) this._inverter(this.forwardStack, this.backwardStack)
+        else this._inverter(this.backwardStack, this.forwardStack)
+
+        this.inverted = !this.inverted
+    }
+
+    _inverter(from: number[], to: number[]) {
+        while (from.length !== 0) {
+            to.push(from.pop())
+        }
     }
 }
 
