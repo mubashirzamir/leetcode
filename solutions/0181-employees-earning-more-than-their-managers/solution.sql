@@ -1,5 +1,5 @@
-# Write your MySQL query statement below
-# subquery
-select name as Employee from Employee e where (
-    select salary from Employee where id = e.managerId
-) < salary
+-- Write your PostgreSQL query statement below
+select e.name as employee
+from employee e
+join employee m on m.id = e.managerId
+where m.salary < e.salary 
