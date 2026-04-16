@@ -2,8 +2,8 @@ function twoSum(nums: number[], target: number): number[] {
     let map = new Map<number, number>()
 
     for (let i = 0; i < nums.length; i++) {
-        if (map.has(target - nums[i])) return [i, map.get(target - nums[i])]
-        map.set(nums[i], i)
+        if (map.has(nums[i])) return [i, map.get(nums[i])]
+        map.set(target - nums[i], i)
     }
 
     return []
