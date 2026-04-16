@@ -1,12 +1,17 @@
 function isValid(s: string): boolean {
-    let stack: string[] = []
+    let stack = []
 
-    for (const c of s) {
-        const top = stack[stack.length - 1]
-        if (['(', '{', '['].includes(c)) stack.push(c)
-        else if ((top === '(' && c === ')') || (top === '{' && c === '}') || (top === '[' && c === ']')) stack.pop()
-        else return false
+    for (let c of s) {
+        if (match(stack[stack.length - 1], c)) {
+            stack.pop()
+        } else {
+            stack.push(c)
+        }
     }
 
     return stack.length === 0
 };
+
+const match = (p: string, q: string): boolean => {
+    return (p === '(' && q === ')') || (p === '[' && q === ']') || (p === '{' && q === '}')
+}
