@@ -1,22 +1,21 @@
 function maxProfit(prices: number[]): number {
     // two pointers
-    // left pointer moves forward if right < left
-    // right pointer keeps moving forward, resets to left + 1 if left pointer position resets
+    // keep track of currProfit
+    // maxProfit = max(currProfit, maxProfit)
 
-    if (prices.length === 1) return 0
+    let maxProfit = 0
+    let i = 0
+    let j = 1
 
-    let result = 0, left = 0, right = 1
-
-    while (right < prices.length) {
-        result = Math.max(result, prices[right] - prices[left])
-
-        if (prices[left] > prices[right]) {
-            left = right
-            right = left + 1
+    while (j < prices.length) {
+        if (prices[i] > prices[j]) {
+            i = j
+            j = i + 1
         } else {
-            right = right + 1
+            maxProfit = Math.max(maxProfit, prices[j] - prices[i])
+            j++
         }
     }
 
-    return result
+    return maxProfit
 };
