@@ -1,24 +1,21 @@
 function isPalindrome(s: string): boolean {
-    s = sanitize(s)
-    let left = 0, right = s.length - 1
+    s = s.toLowerCase()
+    let i = 0
+    let j = s.length - 1
 
-    while (left < right) {
-        if (s.charAt(left) !== s.charAt(right)) return false
+    while (i < j) {
+        while (i < j && !isAlNum(s.charAt(i))) i++
+        while (i < j && !isAlNum(s.charAt(j))) j--
 
-        left++
-        right--
+        if (s.charAt(i) !== s.charAt(j)) return false
+
+        i++
+        j--
     }
 
     return true
 };
 
-const sanitize = (s: string): string => {
-    let result = ""
-
-    for (const c of s) {
-        const cCode = c.toUpperCase().charCodeAt(0)
-        if ((cCode >= 48 && cCode <= 57) || (cCode >= 65 && cCode <= 90)) result += c.toUpperCase()
-    }
-
-    return result
-}
+const isAlNum = (c: string): boolean => {
+    return (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122) || (c.charCodeAt(0) >= 48 && c.charCodeAt(0) <= 57)
+} 
