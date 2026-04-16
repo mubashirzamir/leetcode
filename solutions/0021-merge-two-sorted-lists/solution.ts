@@ -11,33 +11,30 @@
  */
 
 function mergeTwoLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
-    if (list1 === null) return list2
-    if (list2 === null) return list1
-    if (list1 === null && list2 === null) return null
+    let merged = new ListNode()
+    const headMerged = merged
 
-    let result = new ListNode()
-    let curr1 = list1, curr2 = list2, currResult = result
+    // while there are elements in both lists
+    while (list1 || list2) {
+        merged.next = new ListNode()
+        merged = merged.next
 
-    while (curr1 !== null || curr2 !== null) {
-        let val = null
-
-        if (curr1 === null) {
-            val = curr2.val
-            curr2 = curr2.next
-        } else if (curr2 === null) {
-            val = curr1.val
-            curr1 = curr1.next
-        } else if (curr1.val <= curr2.val) {
-            val = curr1.val
-            curr1 = curr1.next
-        } else if (curr1.val > curr2.val) {
-            val = curr2.val
-            curr2 = curr2.next
+        if (!list1) {
+            merged.val = list2.val
+            list2 = list2.next
+        } else if (!list2) {
+            merged.val = list1.val
+            list1 = list1.next
+        } else if (list1.val <= list2.val) {
+            merged.val = list1.val
+            list1 = list1.next
+        } else if (list1.val > list2.val) {
+            merged.val = list2.val
+            list2 = list2.next
         }
 
-        currResult.next = new ListNode(val)
-        currResult = currResult.next
+
     }
 
-    return result.next
+    return headMerged.next
 };
