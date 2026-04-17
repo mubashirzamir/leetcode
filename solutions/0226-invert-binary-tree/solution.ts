@@ -13,18 +13,25 @@
  */
 
 function invertTree(root: TreeNode | null): TreeNode | null {
-    const invert = (node: TreeNode | null) => {
-        if (node === null) return
+    // bfs
+    // flip left and right nodes
 
-        const temp = node.left
-        node.left = node.right
-        node.right = temp
+    if (!root) return null
 
-        invert(node.left)
-        invert(node.right)
+    const queue: TreeNode[] = [root]
+
+    while (queue.length !== 0) {
+        let current = queue.pop()
+
+        const left = current?.left
+        const right = current?.right
+
+        current.left = right
+        current.right = left
+
+        if (current?.left) queue.push(current.left)
+        if (current?.right) queue.push(current.right)
     }
 
-    invert(root)
-
-    return root
+    return root 
 };
