@@ -1,15 +1,22 @@
 function isAnagram(s: string, t: string): boolean {
-    let sMap = new Map<string, number>()
+    if (s.length !== t.length) return false
 
-    for (const c of s) {
-        sMap.set(c, (sMap.get(c) || 0) + 1)
+    const sCount = getLetterCount(s)
+    const tCount = getLetterCount(t)
+
+    for (const [key, value] of sCount) {
+        if (tCount.get(key) !== value) return false
     }
 
-    for (const c of t) {
-        if (!sMap.has(c)) return false
-        sMap.set(c, sMap.get(c) - 1)
-        if (sMap.get(c) === 0) sMap.delete(c)
-    }
-
-    return sMap.size === 0
+    return true
 };
+
+const getLetterCount = (p: string): Map<string, number> => {
+    const map = new Map<string, number>()
+
+    for (const c of p) {
+        map.set(c, (map.get(c) + 1) || 1)
+    }
+
+    return map
+}
