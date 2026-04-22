@@ -13,23 +13,7 @@
  */
 
 function lowestCommonAncestor(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
-    const buildPath = (node: TreeNode, target: TreeNode, path: TreeNode[] = []) => {
-        path.push(node)
-
-        if (node.val < target.val) return buildPath(node.right, target, path)
-        else if (node.val > target.val) return buildPath(node.left, target, path)
-        else return path
-    }
-
-    const pathP = buildPath(root, p)
-    const pathQ = buildPath(root, q)
-
-    let i = 0, j = 0
-
-    while (pathP[i] === pathQ[j]) {
-        if (i < pathP.length - 1) i++
-        if (j < pathQ.length - 1) j++
-    }
-
-    return i >= j ? pathP[i - 1] : pathQ[j - 1]
+    if (p.val > root.val && q.val > root.val) return lowestCommonAncestor(root.right, p, q)
+    else if (p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left, p, q)
+    else return root
 };
