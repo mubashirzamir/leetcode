@@ -13,20 +13,23 @@
  */
 
 function isBalanced(root: TreeNode | null): boolean {
-    
-    const height = (node: TreeNode | null) => {
+
+    const dfs = (node: TreeNode) => {
         if (node === null) return 0
 
-        const leftHeight = height(node.left)
-        if (leftHeight === -1) return -1
+        const lHeight = dfs(node.left) + 1
+        const rHeight = dfs(node.right) + 1
 
-        const rightHeight = height(node.right)
-        if (rightHeight === -1) return -1
+        if (Math.abs(lHeight - rHeight) > 1) throw Error('Unbalanced')
 
-        if (Math.abs(leftHeight - rightHeight) > 1) return -1
-
-        return Math.max(leftHeight, rightHeight) + 1
+        return Math.max(lHeight, rHeight)
     }
 
-    return height(root) !== -1
+    try {
+        dfs(root)
+    } catch (e) {
+        return false
+    }
+
+    return true
 };
