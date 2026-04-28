@@ -1,41 +1,51 @@
+enum Direction {
+    Forward,
+    Backward
+}
+
 class MyQueue {
-    forwardStack = []
-    backwardStack = []
-
-    inverted = false
-
+    queue: number[] = []
+    aux: number[] = []
+    direction: Direction = Direction.Forward
+    
     constructor() {
     }
 
     push(x: number): void {
-        if (this.inverted) this._invert()
-        this.forwardStack.push(x)
+        if (this.direction === Direction.Backward) this.reverse()
+
+        this.queue.push(x)
     }
 
     pop(): number {
-        if (!this.inverted) this._invert()
-        return this.backwardStack.pop()
+        if (this.direction !== Direction.Backward) this.reverse()
+
+        return this.aux.pop()
     }
 
     peek(): number {
-        if (!this.inverted) this._invert()
-        return this.backwardStack[this.backwardStack.length - 1]
+        if (this.direction !== Direction.Backward) this.reverse()
+
+        return this.aux[this.aux.length - 1]
     }
 
     empty(): boolean {
-        return this.forwardStack.length === 0 && this.backwardStack.length === 0
+        return this.queue.length === 0 && this.aux.length === 0
     }
 
-    _invert() {
-        if (!this.inverted) this._inverter(this.forwardStack, this.backwardStack)
-        else this._inverter(this.backwardStack, this.forwardStack)
+    reverse(): void {
+        if (this.direction === Direction.Forward) {
+            while (this.queue.length !== 0) {
+                this.aux.push(this.queue.pop())
+            }
 
-        this.inverted = !this.inverted
-    }
+            this.direction = Direction.Backward
+        } else {
+            while (this.aux.length !== 0) {
+                this.queue.push(this.aux.pop())
+            }
 
-    _inverter(from: number[], to: number[]) {
-        while (from.length !== 0) {
-            to.push(from.pop())
+            this.direction = Direction.Forward
         }
     }
 }
