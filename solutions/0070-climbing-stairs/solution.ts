@@ -1,20 +1,19 @@
-// Top-down memoization
-// Add up the unique ways you can get to (n - 1) and (n - 2)
+// Bottom-up dynamic programming (tabulation)
+// Build the solution iteratively from base cases instead of recursion
 // The intuition is that:
 // (n - 1) + 1 will be a unique path
 // (n - 2) + 2 will be a unique path
 // Take sum to get total unique paths 
 function climbStairs(n: number): number {
-    let memo = [0, 1, 2]
+    let ways = Array.from({ length: n + 1 }, () => null)
 
-    const ways = (n: number) => {
-        if (memo[n]) return memo[n]
+    ways[0] = 0
+    ways[1] = 1
+    ways[2] = 2
 
-        const result = ways(n - 1) + ways(n - 2)
-        memo[n] = result
-
-        return result
+    for (let i = 3; i <= n; i++) {
+        ways[i] = ways[i - 1] + ways[i - 2]
     }
 
-    return ways(n)
+    return ways[n]
 };
