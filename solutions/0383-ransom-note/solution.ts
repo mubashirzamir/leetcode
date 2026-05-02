@@ -1,15 +1,18 @@
 function canConstruct(ransomNote: string, magazine: string): boolean {
-    let sMap = new Map<string, number>()
+    // Check if the two are anagrams of each other?
+    let map = new Map<string, number>()
 
     for (const c of ransomNote) {
-        sMap.set(c, (sMap.get(c) || 0) + 1)
+        map.set(c, (map.get(c) || 0) + 1)
     }
 
     for (const c of magazine) {
-        if (!sMap.has(c)) continue
-        sMap.set(c, sMap.get(c) - 1)
-        if (sMap.get(c) === 0) sMap.delete(c)
+        let current = map.get(c)
+        if (current) {
+            map.set(c, --current)
+            if (current === 0) map.delete(c)
+        } 
     }
 
-    return sMap.size === 0
+    return map.size === 0
 };
