@@ -13,18 +13,15 @@
  */
 
 function diameterOfBinaryTree(root: TreeNode | null): number {
-    // diameter at any node is height of left subtree + height of right subtree
-    // keep a max variable to keep track of max height
-    // evaluate subtree heights at each stage    
+    let max = 0 
 
-    let max = 0
-
-    const evaluate = (node: TreeNode | null) => {
+    const evaluate = (node: TreeNode) => {
         if (node === null) return 0
         if (node.left === null && node.right === null) return 1
 
         const leftHeight = evaluate(node.left)
         const rightHeight = evaluate(node.right)
+        
         max = Math.max(max, leftHeight + rightHeight)
 
         return Math.max(leftHeight, rightHeight) + 1
