@@ -11,14 +11,18 @@
  */
 
 function middleNode(head: ListNode | null): ListNode | null {
-    // two pointers (fast & slow)
-    let fast = head
-    let slow = head
-
-    while (fast?.next) {
-        fast = fast?.next?.next
-        slow = slow.next
+    // Two pointers
+    // First pointer increments by 2
+    // Second pointer increments by 1
+    // When first pointer reaches end, return second pointer
+    let p = head
+    let q = head
+    
+    while (p !== undefined) {
+        p = p?.next?.next
+        if (p === undefined) break
+        q = q?.next
     }
 
-    return slow
+    return q
 };
