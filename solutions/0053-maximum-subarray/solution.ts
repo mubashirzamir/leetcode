@@ -1,19 +1,23 @@
 function maxSubArray(nums: number[]): number {
-    // two pointers
-    // left pointer resets if sum < right pointer number
-    // result = nums.slice(left, right + 1)
+    // left and right pointer
+    // keep incrementing right pointer
+    // if right pointer > current sum, then left pointer increments to right and right++
 
-    let left = 0, right = 0, max = Number.NEGATIVE_INFINITY, curr = 0
+    let left = 0
+    let right = 1
+    let max = nums[0]
+    let current = nums[0]
 
     while (right < nums.length) {
-        if (curr < 0 && curr < nums[right]) {
+        if (nums[right] > current && current < 0) {
             left = right
-            curr = 0
+            current = nums[left]
+        } else {
+            current += nums[right]
         }
 
-        curr += nums[right]
-        max = Math.max(max, curr)
         right++
+        max = Math.max(max, current)
     }
 
     return max
