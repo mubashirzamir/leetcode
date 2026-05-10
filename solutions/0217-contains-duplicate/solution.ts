@@ -1,9 +1,9 @@
 function containsDuplicate(nums: number[]): boolean {
     const set = new Set<number>()
 
-    for (const n of nums) {
-        if (set.has(n)) return true
-        set.add(n)
+    for (const c of nums) {
+        if (set.has(c)) return true
+        set.add(c)
     }
 
     return false
