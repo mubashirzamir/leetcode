@@ -1,34 +1,44 @@
 function updateMatrix(mat: number[][]): number[][] {
-    // bfs from all zeroes.
-    let queue: number[][] = []
+    // Multi-source BFS
+    let rowLength = mat.length
+    let colLength = mat[0].length
+    let queue = []
+    let result = Array.from({ length: mat.length }, () => Array.from({ length: mat[0].length }, () => 0))
 
-    for (let i = 0; i < mat.length; i++) {
-        for (let j = 0; j < mat[0].length; j++) {
+
+    for (let i = 0; i < rowLength; i++) {
+        for (let j = 0; j < colLength; j++) {
             if (mat[i][j] === 0) queue.push([i, j])
-            else mat[i][j] = Number.POSITIVE_INFINITY
+            else result[i][j] = Infinity
         }
     }
 
-    const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+    const dirs = [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1]
+    ]
+
 
     while (queue.length !== 0) {
-        const [i, j] = queue.shift()
+        const current = queue.shift()
+        const i = current[0]
+        const j = current[1]
 
         for (const d of dirs) {
-            const newI = i + d[0]
-            const newJ = j + d[1]
+            const newI = d[0] + i
+            const newJ = d[1] + j
 
-            // out of bounds
-            if (newI < 0 || newI > mat.length - 1 || newJ < 0 || newJ > mat[0].length - 1) continue
+            // Out of bounds
+            if (newI < 0 || newI >= rowLength || newJ < 0 || newJ >= colLength) continue
 
-            // if new position is not zero && we find a new minimum
-            // update distance and push into the queue
-            if (mat[newI][newJ] !== 0 && mat[newI][newJ] > mat[i][j] + 1) {
-                mat[newI][newJ] = mat[i][j] + 1
+            if (result[newI][newJ] > result[i][j] + 1) {
+                result[newI][newJ] = result[i][j] + 1
                 queue.push([newI, newJ])
             }
         }
     }
 
-    return mat
+    return result
 };
