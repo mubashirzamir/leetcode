@@ -15,17 +15,17 @@
 function levelOrder(root: TreeNode | null): number[][] {
     if (!root) return []
 
-    let result: number[][] = []
-
+    let result = []
     let queue = [{ node: root, level: 0 }]
 
     while (queue.length !== 0) {
         const { node, level } = queue.shift()
-        if (result[level] === undefined) result.push([])
-        result[level].push(node.val)
 
-        node.left && queue.push({ node: node.left, level: level + 1 })
-        node.right && queue.push({ node: node.right, level: level + 1 })
+        if (node.left) queue.push({ node: node.left, level: level + 1 })
+        if (node.right) queue.push({ node: node.right, level: level + 1 })
+
+        if (result[level]) result[level].push(node.val)
+        else result[level] = [node.val]
     }
 
     return result
