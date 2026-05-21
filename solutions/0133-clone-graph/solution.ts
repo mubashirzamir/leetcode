@@ -14,25 +14,26 @@
 
 
 function cloneGraph(node: _Node | null): _Node | null {
-    // Keep track of duplicated nodes in a map to avoid infinite loops
-    // We take advantage of the fact each node.val is unique
-    // Recursively clone neighbors
-    const map = new Map<number, _Node>()
+    // dfs
 
-    const cloner = (node: _Node | null) => {
-        if (node == null) return null
-        if (map.has(node.val)) return map.get(node.val)
+    if (!node) return null
 
-        const duplicate = new _Node(node.val)
-        map.set(node.val, duplicate)
+    // We take advantage of the fact each node.val is unique and sequential
+    const tracker = []
 
-        for (const n of node.neighbors) {
-            const duplicateNeighbor = cloner(n)
-            duplicate.neighbors.push(duplicateNeighbor)
+    const clone = (node: Node) => {
+        if (tracker[node.val]) return tracker[node.val]
+
+        const cloned = new Node(node.val)
+        tracker[node.val] = cloned
+
+        for (const neighbor of node.neighbors) {
+            const clonedNeighbor = clone(neighbor)
+            cloned.neighbors.push(clonedNeighbor)
         }
 
-        return duplicate
+        return cloned
     }
 
-    return cloner(node)
+    return clone(node)
 };
