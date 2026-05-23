@@ -1,7 +1,13 @@
 function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+    // build adjacency list -> course => prerequisites
+    // use DFS to check if a course path creates a cycle
+    // visiting set = nodes currently in recursion stack
+    // taken set = courses already confirmed safe
+    // if we revisit a visiting node => cycle exists
+    // if all DFS traversals finish without cycles => return true
+    
     if (prerequisites.length === 0) return true
 
-    prerequisites.sort((a, b) => a[0] - b[0])
     const map = new Map<number, number[]>()
 
     for (const course of prerequisites) {
