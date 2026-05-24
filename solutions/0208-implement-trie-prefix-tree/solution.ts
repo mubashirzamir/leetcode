@@ -1,46 +1,52 @@
-// At each stage, there are 26 choices
+class TrieNode {
+    children: Array<TrieNode | null> = Array(26).fill(null)
+    end = false
+}
+
 class Trie {
-    child: (Trie | null)[] = Array(26).fill(null)
-    end: boolean = false
+    root = new TrieNode()
 
-    constructor() {
-    }
+    insert(word: string) {
+        let node = this.root
 
-    insert(word: string): void {
-        if (word.length === 0) return
+        for (const ch of word) {
+            const idx = ch.charCodeAt(0) - 97
 
-        const l = word.charAt(0).charCodeAt(0) - 97
+            if (!node.children[idx]) {
+                node.children[idx] = new TrieNode()
+            }
 
-        if (this.child[l] === null) this.child[l] = new Trie()
-        if (word.length === 1) this.child[l].end = true
+            node = node.children[idx]!
+        }
 
-        this.child[l].insert(word.substring(1, word.length))
+        node.end = true
     }
 
     search(word: string): boolean {
-        return this.searcher(word, true)
+        let node = this.root
+
+        for (const ch of word) {
+            const idx = ch.charCodeAt(0) - 97
+
+            if (!node.children[idx]) return false
+
+            node = node.children[idx]!
+        }
+
+        return node.end
     }
 
     startsWith(prefix: string): boolean {
-        return this.searcher(prefix)
-    }
+        let node = this.root
 
-    searcher(word: string, strict: boolean = false): boolean {
-        if (word.length === 0) return true
+        for (const ch of prefix) {
+            const idx = ch.charCodeAt(0) - 97
 
-        const l = word.charAt(0).charCodeAt(0) - 97
+            if (!node.children[idx]) return false
 
-        if (this.child[l] === null) return false
-        if (word.length === 1) return strict ? this.child[l].end : true
+            node = node.children[idx]!
+        }
 
-        return this.child[l].searcher(word.substring(1, word.length), strict)
+        return true
     }
 }
-
-/**
- * Your Trie object will be instantiated and called as such:
- * var obj = new Trie()
- * obj.insert(word)
- * var param_2 = obj.search(word)
- * var param_3 = obj.startsWith(prefix)
- */
