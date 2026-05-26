@@ -1,37 +1,34 @@
-type Item = {
-    value: number
+type Element = {
+    val: number,
     min: number
 }
 
 class MinStack {
-    stack: Item[] = []
+    stack: Element[]
 
     constructor() {
+        this.stack = []
     }
 
     push(val: number): void {
         this.stack.push({
-            value: val,
+            val: val,
             min: Math.min(val, this.getMin())
         })
     }
 
     pop(): void {
-        this.stack.pop().value
+        this.stack.pop().val
     }
 
     top(): number {
-        return this._getTopItem().value
+        return this.stack[this.stack.length - 1].val
     }
 
     getMin(): number {
         if (this.stack.length === 0) return Infinity
 
-        return this._getTopItem().min
-    }
-
-    _getTopItem(): Item {
-        return this.stack[this.stack.length - 1]
+        return this.stack[this.stack.length - 1].min
     }
 }
 
