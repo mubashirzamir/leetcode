@@ -12,17 +12,15 @@
  * }
  */
 
-// Just dfs and keep checking along the way
 function isValidBST(root: TreeNode | null): boolean {
-
-    const dfs = (root: TreeNode | null, lowerBound: number, upperBound: number) => {
+    const validate = (root: TreeNode | null, lb: number, ub: number) => {
+        // Leaf node has been reached and we are in a valid BST
         if (!root) return true
 
-        if (root.left && (root.val <= root.left.val || root.left.val <= lowerBound)) return false
-        if (root.right && (root.val >= root.right.val || root.right.val >= upperBound)) return false
+        if (root.val <= lb || root.val >= ub) return false
 
-        return dfs(root.left, lowerBound, root.val) && dfs(root.right, root.val, upperBound)
+        return validate(root.left, lb, root.val) && validate(root.right, root.val, ub)
     }
 
-    return dfs(root, -Infinity, Infinity)
+    return validate(root, -Infinity, Infinity)
 };
