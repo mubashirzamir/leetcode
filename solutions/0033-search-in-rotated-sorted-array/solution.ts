@@ -1,29 +1,41 @@
 function search(nums: number[], target: number): number {
-    let lo = 0, hi = nums.length - 1
+    // find pivot point
 
-    while (lo <= hi) {
-        const mid = Math.floor((lo + hi) / 2)
+    let left = 0
+    let right = nums.length - 1
+    let pivot = 0
 
-        if (nums[mid] === target) return mid
-        if (nums[lo] === target) return lo
-        if (nums[hi] === target) return hi
+    while (left < right) {
+        const mid = Math.floor((left + right) / 2)
+        
+        // pivot is to the right of mid
+        if (nums[mid] > nums[right]) left = mid + 1
+        // pivot is at mid or to the left
+        else right = mid
 
-        if (target < nums[mid] && target > nums[lo]) {
-            hi = mid - 1
-        } else if (target > nums[mid] && target < nums[hi]) {
-            lo = mid + 1
-        } else {
-            // The critical point is between lo and hi and target lies between.
-            // Example cases:
-            // 4, 5, 6, 7, 0, 1, 2 - target = 0
-            // 4, 5, 6, 7, 8, 1, 2 - target = 8
+    }
 
-            if (target > nums[mid] && target > nums[hi]) {
-                lo++
-            } else if (target < nums[mid] && target < nums[lo]) {
-                hi--
-            }
-        }
+    pivot = left
+
+    // once pivot has been found, perform binary search
+
+    // case 01: binary search on left hand side
+    if (nums[nums.length - 1] < target) {
+        left = 0
+        right = pivot - 1
+    }
+    // case 02: binary search on right hand side
+    else {
+        left = pivot
+        right = nums.length - 1
+    }
+
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2)
+
+        if (nums[mid] < target) left = mid + 1
+        else if (nums[mid] > target) right = mid - 1
+        else return mid
     }
 
     return -1
