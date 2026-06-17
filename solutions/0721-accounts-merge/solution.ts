@@ -1,50 +1,64 @@
-function accountsMerge(accounts: string[][]): string[][] {
-    // email -> { name, neighbors } — builds an adjacency list where shared emails connect accounts
-    let map = new Map<string, any>()
+/**
+ * @param {string[][]} accounts
+ * @return {string[][]}
+ */
+var accountsMerge = function (accounts) {
+    const uf = new UnionFind()
+    const emailToName = {} // Map email to account name
 
-    for (const acc of accounts) {
-        const name = acc[0]
-        const emails = acc.slice(1, acc.length)
-
+    // Step 1: Union all emails in the same account
+    for (const account of accounts) {
+        const [name, ...emails] = account
         for (const email of emails) {
-            if (!map.has(email)) {
-                // first time seeing this email — seed it with all sibling emails as neighbors
-                map.set(email, { name: name, neighbors: new Set(emails) })
-            } else {
-                // email already exists — merge in new neighbors (union of both sets)
-                const existing = map.get(email).neighbors
-                map.set(email, { name: name, neighbors: new Set([...existing, ...emails]) })
-            }
+            emailToName[email] = name // Map email to name
+            uf.union(emails[0], email) // Union first email with the rest
         }
     }
 
-    let visited = new Set<string>()
+    // Step 2: Group emails by their root parent
+    const groups: Record<string, string[]> = {}
+    for (const email in emailToName) {
+        const root = uf.find(email);
+        if (!groups[root]) groups[root] = []
+        groups[root].push(email)
+    }
+
+    // Step 3: Sort and build result
     let result = []
 
-    // collects all emails in a connected component via DFS
-    const dfs = (email, item) => {
-        if (visited.has(email)) return
-
-        visited.add(email)
-        item.push(email)
-        const neighbors = map.get(email).neighbors
-
-        for (const n of neighbors) {
-            dfs(n, item)
-        }
+    for (const [parent, children] of Object.entries(groups)) {
+        result.push([emailToName[parent], ...children.sort()])
     }
 
-    for (const [email, { name, _ }] of map) {
-        if (visited.has(email)) continue
-
-        // each unvisited email is the start of a new merged account
-        const item = []
-        dfs(email, item)
-        result.push({ name, emails: item })
-    }
-
-    // flatten and sort emails within each account (name goes first)
-    return result.map((item, index) => {
-        return [item.name, ...item.emails.sort()]
-    })
+    return result
 };
+
+class UnionFind {
+    parent: Object
+
+    constructor() {
+        this.parent = {}
+    }
+
+    // Return parent
+    // C -> B, B -> A, A -> A. Find C.
+    // We have to path compress here
+    find(x) {
+        if (this.parent[x] === x) return x
+
+        this.parent[x] = this.find(this.parent[x])
+
+        return this.parent[x]
+    }
+
+    // Point y's parent to x's parent
+    union(x, y) {
+        if (!(x in this.parent)) this.parent[x] = x
+        if (!(y in this.parent)) this.parent[y] = y
+
+        const px = this.find(x)
+        const py = this.find(y)
+
+        if (px != py) this.parent[py] = px
+    }
+}
